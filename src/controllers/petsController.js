@@ -1,11 +1,11 @@
 const httpStatus = require('../helpers/httpStatus')
 
-const petController = (Pet) => {
+const petsController = (Pets) => {
 // GET ALL
-  const getAllPet = async (req, res, next) => {
+  const getAllPets = async (req, res, next) => {
     try {
       const { query } = req
-      const response = await Pet.find(query)
+      const response = await Pets.find(query)
 
       return res.status(httpStatus.OK).json(response)
     } catch (err) {
@@ -14,15 +14,15 @@ const petController = (Pet) => {
   }
 
   // POST
-  const postPet = async (req, res, next) => {
+  const postPets = async (req, res, next) => {
     try {
       const { body } = req
 
-      const pet = await new Pet(body)
+      const pets = await new Pets(body)
 
-      await pet.save()
+      await pets.save()
 
-      return res.status(httpStatus.CREATED).json(pet)
+      return res.status(httpStatus.CREATED).json(pets)
     } catch (err) {
       next(err)
     }
@@ -33,7 +33,7 @@ const petController = (Pet) => {
     try {
       const { params } = req
 
-      const response = await Pet.findById(params.id)
+      const response = await Pets.findById(params.id)
 
       res.status(httpStatus.OK).json(response)
     } catch (err) {
@@ -46,7 +46,7 @@ const petController = (Pet) => {
     try {
       const { params, body } = req
 
-      const checkData = await Pet.find({
+      const checkData = await Pets.find({
         _id: params.id
       })
 
@@ -54,7 +54,7 @@ const petController = (Pet) => {
         return res.status(httpStatus.FORBIDDEN).send('No data found with the provided ID.')
       }
 
-      await Pet.updateOne(
+      await Pets.updateOne(
         {
           _id: params.id
         },
@@ -81,7 +81,7 @@ const petController = (Pet) => {
     try {
       const { params } = req
 
-      await Pet.findByIdAndDelete(params.id)
+      await Pets.findByIdAndDelete(params.id)
 
       return res.status(httpStatus.OK).send('Data successful deleted')
     } catch (err) {
@@ -89,7 +89,7 @@ const petController = (Pet) => {
     }
   }
 
-  return { getAllPet, getPetById, postPet, putPetById, deletePetById }
+  return { getAllPets, getPetById, postPets, putPetById, deletePetById }
 }
 
-module.exports = petController
+module.exports = petsController

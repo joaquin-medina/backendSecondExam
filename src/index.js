@@ -1,9 +1,9 @@
 const express = require('express') // requerir express
 const People = require('./models/peopleModel') // requerir el modelo People
-const Pet = require('./models/petModel')
+const Pets = require('./models/petsModel')
 const peopleRouter = require('./routes/peopleRouter')(People) // importar e inyección
 const authRouter = require('./routes/authRouter')(People)
-const petRouter = require('./routes/petRouter')(Pet)
+const petsRouter = require('./routes/petsRouter')(Pets)
 const errorHandler = require('./middleware/errorHandler')
 const httpStatus = require('./helpers/httpStatus')
 require('dotenv').config()
@@ -19,7 +19,7 @@ app.use(express.json())
 app.all(
   '/*',
   expressjwt({ secret: process.env.SECRET, algorithms: ['HS256'] }).unless({
-    path: ['/auth/login', '/auth/register', '/api/pet']
+    path: ['/auth/login', '/auth/register', '/api/pets']
   })
 )
 
@@ -34,7 +34,7 @@ app.use((err, _, res, next) => {
   }
 })
 
-app.use('/api', peopleRouter, petRouter)
+app.use('/api', peopleRouter, petsRouter)
 app.use('/', authRouter)
 
 app.use(errorHandler)
